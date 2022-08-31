@@ -1,0 +1,6 @@
+batch_size: 700
+epochs: 500
+data_loader: default_data_loader.DataLoader
+model: default_model.Model
+trainer: default_trainer.Trainer
+use_trained_model: best # best|last
