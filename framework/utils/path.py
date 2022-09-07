@@ -10,8 +10,29 @@ def data_path(file_path):
     return os.path.join(_assets_path, 'data', file_path)
 
 
-def experiment_path(file_path, experiment=None):
-    if not experiment:
-        experiment = c['now'].strftime('%Y_%m_%d__%H_%M_%S')
+def all_experiments_dir_path():
+    return os.path.join(_assets_path, 'experiments')
 
-    return os.path.join(_assets_path, 'experiments', experiment, file_path)
+
+def experiment_path(file_path=None, experiment=None):
+    if not experiment:
+        now_formatted = c['now'].strftime('%Y_%m_%d__%H_%M_%S')
+        experiment = f'_temp__{now_formatted}'
+
+    experiment_dir_path = os.path.join(all_experiments_dir_path(), experiment)
+
+    if file_path:
+        return os.path.join(experiment_dir_path, file_path)
+    else:
+        return experiment_dir_path
+
+
+def first_empty_path(parent_dir_path, dir_name):
+    dir_path = os.path.join(parent_dir_path, dir_name)
+
+    counter = 2
+    while os.path.exists(dir_path):
+        dir_path = os.path.join(parent_dir_path, f'{dir_name}_{counter}')
+        counter += 1
+
+    return dir_path

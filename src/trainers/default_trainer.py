@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 
 from framework.base.trainer import TrainerAbstract
-from framework.utils.configs import c
 from framework.utils.path import experiment_path
 
 
@@ -30,9 +29,8 @@ class Trainer(TrainerAbstract):
         plt.tight_layout()
 
         # save
-        if c['save_experiment']:
-            save_at = experiment_path('accuracy_and_loss.png')
-            plt.savefig(save_at)
+        save_at = experiment_path('accuracy_and_loss.png')
+        plt.savefig(save_at)
 
         # show
         plt.show()
