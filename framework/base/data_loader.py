@@ -7,7 +7,7 @@ class IDataLoader(ABC):
         pass
 
     @abstractmethod
-    def get_dev_data(self):
+    def get_validation_data(self):
         pass
 
     @abstractmethod

@@ -1,44 +1,38 @@
-import tensorflow as tf
-
-from framework.utils.arg_parsers import config_file_arg_parser
-from framework.utils.config_loader import ConfigLoader
-from framework.utils.save_model import save_model_at
-
-
 class TrainScript:
     def run(self):
-        args = config_file_arg_parser().parse_args()
+        args = self._get_parsed_args()
+        config_loader = self._get_config_loader(args.config_file_path)
 
-        config_loader = ConfigLoader(args.config_file_path)
-        configs = config_loader.get_configs()
-        data_loader = config_loader.get_data_loader()
-        model = config_loader.get_model()
-        trainer = config_loader.get_trainer()
+        from framework.base.data_loader import IDataLoader
+        from framework.base.model import IModel
+        from framework.base.trainer import TrainerAbstract
+
+        data_loader: IDataLoader = config_loader.get_data_loader()
+        model: IModel = config_loader.get_model()
+        trainer: TrainerAbstract = config_loader.get_trainer()
 
         x_train, y_train = data_loader.get_train_data()
-        x_dev, y_dev = data_loader.get_dev_data()
+        x_validation, y_validation = data_loader.get_validation_data()
 
         model = model.get_compiled_model()
-        history = model.fit(
-            x_train,
-            y_train,
-            batch_size=configs['batch_size'],
-            epochs=configs['epochs'],
-            validation_data=(x_dev, y_dev),
-            callbacks=[*trainer.get_callbacks(), *self._get_callbacks(configs)],
-        )
-        self._save_last_model(model, configs)
-        trainer.display_history(history)
+        trainer.train(model, x_train, y_train, x_validation, y_validation)
 
     @staticmethod
-    def _get_callbacks(configs):
-        callbacks = [tf.keras.callbacks.ModelCheckpoint(save_model_at(configs, 'best_model.h5'), save_best_only=True)]
+    def _get_parsed_args():
+        from framework.utils.arg_parsers import config_file_arg_parser
 
-        return callbacks
+        parser = config_file_arg_parser()
+        args = parser.parse_args()
+
+        return args
 
     @staticmethod
-    def _save_last_model(model, configs):
-        model.save(save_model_at(configs, 'last_model.h5'))
+    def _get_config_loader(config_file_path):
+        from framework.utils.config_loader import ConfigLoader
+
+        config_loader = ConfigLoader(config_file_path)
+
+        return config_loader
 
 
 if __name__ == '__main__':

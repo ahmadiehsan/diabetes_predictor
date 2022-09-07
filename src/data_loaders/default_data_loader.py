@@ -1,35 +1,29 @@
-import os
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 from framework.base.data_loader import IDataLoader
-from framework.utils.path import ROOT_DIR_ABSOLUTE
+from framework.utils.configs import c
+from framework.utils.path import data_path
 
 
 class DataLoader(IDataLoader):
-    def __init__(self, configs):
-        self.configs = configs
-
+    def __init__(self):
         x, y = self._load_x_and_y_from_csv()
-        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0, shuffle=False)
+        x_train, x_test, y_train, y_test = train_test_split(
+            x, y, test_size=c['test_size'], random_state=0, shuffle=False
+        )
 
-        scaler = StandardScaler()
-        scaler.fit(x)
-        x_train = scaler.transform(x_train)
-        x_test = scaler.transform(x_test)
-
-        self.x_train = x_train
+        self.x_train = self._standard_scale(x_train)
         self.y_train = y_train
 
-        self.x_test = x_test
+        self.x_test = self._standard_scale(x_test)
         self.y_test = y_test
 
     @staticmethod
     def _load_x_and_y_from_csv():
         dataframe = pd.read_csv(
-            os.path.join(ROOT_DIR_ABSOLUTE, 'assets', 'data', 'pima-indians-diabetes.csv'),
+            data_path('pima-indians-diabetes.csv'),
             names=[
                 'pregnant_times',
                 'plasma_glucose',
@@ -49,10 +43,17 @@ class DataLoader(IDataLoader):
 
         return x, y
 
+    @staticmethod
+    def _standard_scale(data_set):
+        scaler = StandardScaler()
+        data_set = scaler.fit_transform(data_set)
+
+        return data_set
+
     def get_train_data(self):
         return self.x_train, self.y_train
 
-    def get_dev_data(self):
+    def get_validation_data(self):
         return self.get_test_data()
 
     def get_test_data(self):

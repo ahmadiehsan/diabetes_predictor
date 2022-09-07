@@ -1,20 +1,14 @@
-from framework.utils.arg_parsers import config_file_arg_parser
-from framework.utils.config_loader import ConfigLoader
-from framework.utils.load_model import load_model
-
-
 class TestScript:
-    @staticmethod
-    def run():
-        parser = config_file_arg_parser()
-        parser.add_argument('--run-for-one', '-o', action='store_true', help='run test for one or all of test set')
-        args = parser.parse_args()
+    def run(self):
+        args = self._get_parsed_args()
+        config_loader = self._get_config_loader(args.config_file_path)
 
-        config_loader = ConfigLoader(args.config_file_path)
-        configs = config_loader.get_configs()
-        data_loader = config_loader.get_data_loader()
+        from framework.base.data_loader import IDataLoader
+        from framework.utils.load_model import load_model
 
-        loaded_model = load_model(configs)
+        data_loader: IDataLoader = config_loader.get_data_loader()
+
+        loaded_model = load_model()
 
         print('\n=============== Test Data')
         if args.run_for_one:
@@ -31,6 +25,24 @@ class TestScript:
             print(prediction)
         else:
             loaded_model.evaluate(x_test, y_test, verbose=2)
+
+    @staticmethod
+    def _get_parsed_args():
+        from framework.utils.arg_parsers import config_file_arg_parser
+
+        parser = config_file_arg_parser()
+        parser.add_argument('--run-for-one', '-o', action='store_true', help='run test for one or all of test set')
+        args = parser.parse_args()
+
+        return args
+
+    @staticmethod
+    def _get_config_loader(config_file_path):
+        from framework.utils.config_loader import ConfigLoader
+
+        config_loader = ConfigLoader(config_file_path)
+
+        return config_loader
 
 
 if __name__ == '__main__':

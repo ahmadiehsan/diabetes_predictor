@@ -1,6 +1,10 @@
-batch_size: 700
-epochs: 500
+save_experiment: true
+batch_size: 1000
+epochs: 10000
 data_loader: default_data_loader.DataLoader
 model: default_model.Model
 trainer: default_trainer.Trainer
-use_trained_model: best # best|last
+use_experiment: '2022_09_06__19_37_31'
+
+test_size: 0.2
+learning_rate: 0.0001

@@ -1,15 +1,17 @@
 import os
 
+from framework.utils.configs import c
 
-def is_valid_file_argument(arg_parser, arg):
-    if not os.path.exists(arg):
-        arg_parser.error(f'The file {arg} does not exist!')
-    else:
-        return arg
+_root_dir_absolute = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_assets_path = os.path.join(_root_dir_absolute, 'assets')
 
 
-def _root_dir_absolute():
-    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+def data_path(file_path):
+    return os.path.join(_assets_path, 'data', file_path)
 
 
-ROOT_DIR_ABSOLUTE = _root_dir_absolute()
+def experiment_path(file_path, experiment=None):
+    if not experiment:
+        experiment = c['now'].strftime('%Y_%m_%d__%H_%M_%S')
+
+    return os.path.join(_assets_path, 'experiments', experiment, file_path)

@@ -1,15 +1,12 @@
-import os
-
 import tensorflow as tf
 
-from framework.utils.path import ROOT_DIR_ABSOLUTE
+from framework.utils.configs import c
+from framework.utils.path import experiment_path
 
 
-def load_model(configs):
-    loaded_model = tf.keras.models.load_model(
-        os.path.join(
-            ROOT_DIR_ABSOLUTE, 'assets', 'output', configs['model'], f"{configs['use_trained_model']}_model.h5"
-        )
-    )
+def load_model():
+    model_name = 'best_model.h5'
+    experiment = c['use_experiment']
+    loaded_model = tf.keras.models.load_model(experiment_path(model_name, experiment))
 
     return loaded_model

@@ -14,9 +14,10 @@ source venv/bin/activate
 
 ## Available commands
 
-- `./runner scripts.train <path/to/one/of/the/configs.yml>`
-- `./runner scripts.test <path/to/one/of/the/configs.yml>`
-- `./runner scripts.test <path/to/one/of/the/configs.yml> --run-for-one`
+- `./runner train <path/to/one/of/the/configs.yml>`
+- `./runner test <path/to/one/of/the/configs.yml>`
+- `./runner test <path/to/one/of/the/configs.yml> --run-for-one`
+- `./runner tensorboard <path/to/one/of/the/configs.yml>`
 
 The below commands are also available only for the project developers:
 

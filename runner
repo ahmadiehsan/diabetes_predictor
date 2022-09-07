@@ -29,12 +29,16 @@ function requirements.install() {
 # ###############
 # Scripts
 # #####
-function scripts.train() {
+function train() {
   PYTHONPATH=. python framework/scripts/train.py "${@}"
 }
 
-function scripts.test() {
+function test() {
   PYTHONPATH=. python framework/scripts/test.py "${@}"
+}
+
+function tensorboard() {
+  PYTHONPATH=. python framework/scripts/tb.py "${@}"
 }
 
 # ###############
