@@ -1,9 +1,9 @@
 batch_size: 1000
 epochs: 3000
 data_loader: default_data_loader.DataLoader
-model: 8layers.Model
+model: 3layers.Model
 trainer: default_trainer.Trainer
-use_experiment: 'old'
+use_experiment: 'L3_R0.001_E3000_3'
 
 test_size: 0.2
 learning_rate: 0.001
