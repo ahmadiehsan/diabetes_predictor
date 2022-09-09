@@ -3,16 +3,16 @@ class TrainScript:
         args = self._get_parsed_args()
         config_loader = self._get_config_loader(args.config_file_path)
 
-        from framework.base.data_loader import IDataLoader
+        from framework.base.data_loaders import ITrainDataLoader
         from framework.base.model import IModel
         from framework.base.trainer import TrainerAbstract
 
-        data_loader: IDataLoader = config_loader.get_data_loader()
+        train_data_loader: ITrainDataLoader = config_loader.get_train_data_loader()
         model: IModel = config_loader.get_model()
         trainer: TrainerAbstract = config_loader.get_trainer()
 
-        x_train, y_train = data_loader.get_train_data()
-        x_validation, y_validation = data_loader.get_validation_data()
+        x_train, y_train = train_data_loader.get_train_data()
+        x_validation, y_validation = train_data_loader.get_validation_data()
 
         model = model.get_compiled_model()
         trainer.train(model, x_train, y_train, x_validation, y_validation)

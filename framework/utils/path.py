@@ -15,11 +15,19 @@ def all_experiments_dir_path():
 
 
 def experiment_path(file_path=None, experiment=None):
-    if not experiment:
+    is_read_mode = bool(experiment)
+
+    if not is_read_mode:
         now_formatted = c['now'].strftime('%Y_%m_%d__%H_%M_%S')
         experiment = f'_temp__{now_formatted}'
 
     experiment_dir_path = os.path.join(all_experiments_dir_path(), experiment)
+
+    if not os.path.exists(experiment_dir_path):
+        if is_read_mode:
+            raise Exception(f"The `{experiment}` experiment doesn't exist, check the `use_experiment` value")
+        else:
+            os.makedirs(experiment_dir_path)
 
     if file_path:
         return os.path.join(experiment_dir_path, file_path)

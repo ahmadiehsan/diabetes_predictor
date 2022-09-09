@@ -5,11 +5,11 @@ class TensorboardScript:
     def run(self):
         args = self._get_parsed_args()
         config_loader = self._get_config_loader(args.config_file_path)
-        configs = config_loader.configs
+        base_configs = config_loader.base_configs
 
         from framework.utils.path import experiment_path
 
-        experiment = configs['use_experiment']
+        experiment = base_configs['use_experiment']
         subprocess.call(f"tensorboard --logdir {experiment_path('tensorboard', experiment)}", shell=True)
 
     @staticmethod

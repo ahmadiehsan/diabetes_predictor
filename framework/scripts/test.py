@@ -3,20 +3,20 @@ class TestScript:
         args = self._get_parsed_args()
         config_loader = self._get_config_loader(args.config_file_path)
 
-        from framework.base.data_loader import IDataLoader
+        from framework.base.data_loaders import ITestDataLoader
         from framework.utils.load_model import load_model
 
-        data_loader: IDataLoader = config_loader.get_data_loader()
+        test_data_loader: ITestDataLoader = config_loader.get_test_data_loader()
 
         loaded_model = load_model()
 
         print('\n=============== Test Data')
         if args.run_for_one:
-            x_test, y_test = data_loader.get_one_test_data()
+            x_test, y_test = test_data_loader.get_one_test_data(args.run_for_one)
             print(f'Input: {x_test}')
             print(f'Correct answer: {y_test}')
         else:
-            x_test, y_test = data_loader.get_test_data()
+            x_test, y_test = test_data_loader.get_test_data()
             print(f'Input length: {len(x_test)}')
 
         print('\n=============== Result')
@@ -31,7 +31,7 @@ class TestScript:
         from framework.utils.arg_parsers import config_file_arg_parser
 
         parser = config_file_arg_parser()
-        parser.add_argument('--run-for-one', '-o', action='store_true', help='run test for one or all of test set')
+        parser.add_argument('--run-for-one', '-o', type=int, help='run test for one or all of test set')
         args = parser.parse_args()
 
         return args

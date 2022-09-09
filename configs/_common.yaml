@@ -1,0 +1,11 @@
+base:
+  batch_size: 1000
+  use_experiment: 'L5_R1e-04_E4000'
+  model: medium.Model
+  trainer: show_chart.Trainer
+  data_loaders:
+    train: train.TrainDataLoader
+    test: test.TestDataLoader
+
+custom:
+  validation_size: 0.2

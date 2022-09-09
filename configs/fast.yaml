@@ -1,0 +1,8 @@
+includes:
+  - _common.yaml
+
+base:
+  epochs: 700
+
+custom:
+  learning_rate: 0.001
