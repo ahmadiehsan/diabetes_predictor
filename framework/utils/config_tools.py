@@ -35,8 +35,9 @@ class ConfigLoader(metaclass=SingletonMeta):
         custom_configs = args_dict.pop('custom_configs')
 
         custom_configs_dict = {}
-        for config in custom_configs:
-            custom_configs_dict[config[0]] = config[1]
+        if custom_configs:
+            for config in custom_configs:
+                custom_configs_dict[config[0]] = config[1]
 
         return cls(config_file_path, args_dict, custom_configs_dict)
 
