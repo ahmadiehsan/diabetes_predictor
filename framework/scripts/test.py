@@ -1,7 +1,10 @@
 class TestScript:
     def run(self):
         args = self._get_parsed_args()
-        config_loader = self._get_config_loader(args.config_file_path)
+
+        from framework.utils.config_tools import ConfigLoader
+
+        config_loader = ConfigLoader.init_by_args(args)
 
         from framework.base.data_loaders import ITestDataLoader
         from framework.utils.load_model import load_model
@@ -28,21 +31,17 @@ class TestScript:
 
     @staticmethod
     def _get_parsed_args():
-        from framework.utils.arg_parsers import config_file_arg_parser
+        import argparse
+        from framework.utils.arg_parsers import add_config_file_path_arg, add_use_experiment_arg, add_custom_configs_arg
 
-        parser = config_file_arg_parser()
+        parser = argparse.ArgumentParser()
+        add_config_file_path_arg(parser)
+        add_use_experiment_arg(parser)
+        add_custom_configs_arg(parser)
         parser.add_argument('--run-for-one', '-o', type=int, help='run test for one or all of test set')
         args = parser.parse_args()
 
         return args
-
-    @staticmethod
-    def _get_config_loader(config_file_path):
-        from framework.utils.config_loader import ConfigLoader
-
-        config_loader = ConfigLoader(config_file_path)
-
-        return config_loader
 
 
 if __name__ == '__main__':

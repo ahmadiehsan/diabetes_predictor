@@ -1,7 +1,7 @@
 base:
   batch_size: 1000
   use_experiment: 'L5_R1e-04_E4000'
-  model: medium.Model
+  model: deep.Model
   trainer: show_chart.Trainer
   data_loaders:
     train: train.TrainDataLoader

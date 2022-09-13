@@ -1,7 +1,10 @@
 class TrainScript:
     def run(self):
         args = self._get_parsed_args()
-        config_loader = self._get_config_loader(args.config_file_path)
+
+        from framework.utils.config_tools import ConfigLoader
+
+        config_loader = ConfigLoader.init_by_args(args)
 
         from framework.base.data_loaders import ITrainDataLoader
         from framework.base.model import IModel
@@ -19,20 +22,19 @@ class TrainScript:
 
     @staticmethod
     def _get_parsed_args():
-        from framework.utils.arg_parsers import config_file_arg_parser
+        import argparse
+        from framework.utils.arg_parsers import add_config_file_path_arg, add_custom_configs_arg
 
-        parser = config_file_arg_parser()
+        parser = argparse.ArgumentParser()
+        add_config_file_path_arg(parser)
+        add_custom_configs_arg(parser)
+        parser.add_argument('--keep', '-k', help='keep the experiment contents by default', action='store_true')
+        parser.add_argument('--epochs', '-e', help='number of epochs', type=int)
+        parser.add_argument('--batch-size', '-b', help='batch_size value', type=int)
+        parser.add_argument('--model', '-m', help='model path', type=str)
         args = parser.parse_args()
 
         return args
-
-    @staticmethod
-    def _get_config_loader(config_file_path):
-        from framework.utils.config_loader import ConfigLoader
-
-        config_loader = ConfigLoader(config_file_path)
-
-        return config_loader
 
 
 if __name__ == '__main__':

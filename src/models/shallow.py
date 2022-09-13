@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from framework.base.model import IModel
-from framework.utils.configs import c_custom
+from src.models.utils import ModelCompiler
 
 
 class Model(IModel):
@@ -14,9 +14,6 @@ class Model(IModel):
                 tf.keras.layers.Dense(1, activation='sigmoid'),
             ]
         )
-        model.summary()
+        model_compiler = ModelCompiler(model)
 
-        optimizer = tf.keras.optimizers.Adam(learning_rate=c_custom['learning_rate'])
-        model.compile(loss='mean_squared_error', optimizer=optimizer, metrics=['accuracy'])
-
-        return model
+        return model_compiler.compile()

@@ -4,7 +4,10 @@ import subprocess
 class TensorboardScript:
     def run(self):
         args = self._get_parsed_args()
-        config_loader = self._get_config_loader(args.config_file_path)
+
+        from framework.utils.config_tools import ConfigLoader
+
+        config_loader = ConfigLoader.init_by_args(args)
         base_configs = config_loader.base_configs
 
         from framework.utils.path import experiment_path
@@ -14,20 +17,16 @@ class TensorboardScript:
 
     @staticmethod
     def _get_parsed_args():
-        from framework.utils.arg_parsers import config_file_arg_parser
+        import argparse
+        from framework.utils.arg_parsers import add_config_file_path_arg, add_use_experiment_arg, add_custom_configs_arg
 
-        parser = config_file_arg_parser()
+        parser = argparse.ArgumentParser()
+        add_config_file_path_arg(parser)
+        add_use_experiment_arg(parser)
+        add_custom_configs_arg(parser)
         args = parser.parse_args()
 
         return args
-
-    @staticmethod
-    def _get_config_loader(config_file_path):
-        from framework.utils.config_loader import ConfigLoader
-
-        config_loader = ConfigLoader(config_file_path)
-
-        return config_loader
 
 
 if __name__ == '__main__':

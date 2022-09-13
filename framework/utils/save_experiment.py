@@ -3,7 +3,7 @@ import os.path
 import shutil
 
 import visualkeras
-from numpy import float32
+from numpy import float32, int32
 
 from framework.utils.configs import c
 from framework.utils.confirm import query_yes_no
@@ -27,7 +27,7 @@ class ExperimentSaver:
         self._clean_incomplete_experiments()
 
     def _rename_current_experiment(self):
-        if query_yes_no('Do you want to keep the experiment contents?', default='no'):
+        if c['keep'] or query_yes_no('Do you want to keep the experiment contents?', default='no'):
             experiment_dir_new_path = self._get_experiment_dir_new_path()
             shutil.move(experiment_path(), experiment_dir_new_path)
 
@@ -77,20 +77,20 @@ class ExperimentSaver:
             file.write('\n\n\n\n=========================\n')
             file.write('Optimizer Configs\n')
             file.write('=====\n')
-            file.write(json.dumps(self._float32_to_str(self.model.optimizer.get_config()), indent=2))
+            file.write(json.dumps(self._float32_and_int32_to_str(self.model.optimizer.get_config()), indent=2))
 
             # new line at the end of file
             file.write('\n')
 
     @classmethod
-    def _float32_to_str(cls, data_dictionary: dict):
+    def _float32_and_int32_to_str(cls, data_dictionary: dict):
         new_dict = {}
 
         for key, value in data_dictionary.items():
             if isinstance(value, dict):
-                new_dict[key] = cls._float32_to_str(value)
+                new_dict[key] = cls._float32_and_int32_to_str(value)
             else:
-                if isinstance(value, float32):
+                if isinstance(value, (float32, int32)):
                     new_dict[key] = str(value)
                 else:
                     new_dict[key] = value
