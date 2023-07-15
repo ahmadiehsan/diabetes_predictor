@@ -1,25 +1,26 @@
 # Diabetes Predictor
 
-## Preparing workspace
+## Quick Start
 
 ```
-git clone <this repo url>
-cd <cloned dir>
+git clone <this_repo>
+cd <cloned_dir>
 
 virtualenv -p python3 venv
 source venv/bin/activate
 
-./runner requirements.install
+./run requirements.install.dev
+./run app.train
+./run app.test
 ```
 
-## Available commands
+## Available Commands
 
-- `./runner train -h`
-- `./runner test -h`
-- `./runner tensorboard -h`
-
-The below commands are also available only for the project developers:
-
-- `./runner git.pre_commit.init`
-- `./runner git.pre_commit.run_for_all`
-- `./runner requirements.compile`
+- `./run pre_commit.init`
+- `./run pre_commit.run_for_all`
+- `./run requirements.compile`
+- `./run requirements.install.dev`
+- `./run requirements.install.prod`
+- `./run app.train`
+- `./run app.test`
+- `./run app.tensorboard`
